@@ -15,6 +15,9 @@
                 <flux:navbar.item :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:navbar.item>
+                <flux:navbar.item :href="route('organization.settings-form')" :current="request()->routeIs('organization.settings-form')" wire:navigate>
+                    {{ __('Settings') }}
+                </flux:navbar.item>
             </flux:navbar>
 
             <flux:spacer />
@@ -120,5 +123,8 @@
         {{ $slot }}
 
         @fluxScripts
+        @persist('toast')
+        <flux:toast />
+        @endpersist
     </body>
 </html>
