@@ -15,6 +15,10 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+Route::view('organization-settings', 'organization.settings-form')
+    ->middleware(['auth', 'verified'])
+    ->name('organization.settings-form');
+
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
