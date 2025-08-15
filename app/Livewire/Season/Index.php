@@ -12,6 +12,7 @@ use Livewire\Component;
 final class Index extends Component
 {
     #[On('season.created')]
+    #[On('season.archived')]
     public function render(): View
     {
         return view('livewire.season.index', [
