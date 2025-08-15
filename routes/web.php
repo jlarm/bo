@@ -19,6 +19,10 @@ Route::view('organization-settings', 'organization.settings-form')
     ->middleware(['auth', 'verified'])
     ->name('organization.settings-form');
 
+Route::view('seasons', 'season.index')
+    ->middleware(['auth', 'verified'])
+    ->name('season.index');
+
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
