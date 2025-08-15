@@ -11,16 +11,16 @@
                 </div>
 
                 <flux:radio.group wire:model="form.season" variant="buttons" class="w-full *:flex-1">
-                    <flux:radio value="Spring" icon="flower">Spring</flux:radio>
-                    <flux:radio value="Summer" icon="sun">Summer</flux:radio>
-                    <flux:radio value="Fall" icon="leaf">Fall</flux:radio>
-                    <flux:radio value="Winter" icon="snowflake">Winter</flux:radio>
+                    <flux:radio value="{{ \App\Enums\Seasons::SPRING }}" icon="{{ \App\Enums\Seasons::SPRING->iconName() }}">Spring</flux:radio>
+                    <flux:radio value="{{ \App\Enums\Seasons::SUMMER }}" icon="{{ \App\Enums\Seasons::SUMMER->iconName() }}">Summer</flux:radio>
+                    <flux:radio value="{{ \App\Enums\Seasons::FALL }}" icon="{{ \App\Enums\Seasons::FALL->iconName() }}">Fall</flux:radio>
+                    <flux:radio value="{{ \App\Enums\Seasons::WINTER }}" icon="{{ \App\Enums\Seasons::WINTER->iconName() }}">Winter</flux:radio>
                 </flux:radio.group>
 
-                <flux:input wire:model="form.year" placeholder="Year (e.g. 2025)" />
+                <flux:input wire:model="form.year" placeholder="Year (e.g. 2025)"/>
 
                 <div class="flex">
-                    <flux:spacer />
+                    <flux:spacer/>
 
                     <flux:button type="submit" variant="primary">Create</flux:button>
                 </div>

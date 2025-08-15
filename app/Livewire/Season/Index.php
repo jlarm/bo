@@ -15,7 +15,7 @@ final class Index extends Component
     public function render(): View
     {
         return view('livewire.season.index', [
-            'seasons' => Season::all(),
+            'seasons' => Season::orderBySeasonAndYear()->get(),
         ]);
     }
 }

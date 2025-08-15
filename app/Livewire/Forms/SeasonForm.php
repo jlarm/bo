@@ -6,6 +6,7 @@ namespace App\Livewire\Forms;
 
 use App\Models\Season;
 use Livewire\Form;
+use Str;
 
 final class SeasonForm extends Form
 {
@@ -30,10 +31,12 @@ final class SeasonForm extends Form
         ];
 
         Season::create($data);
+
+        $this->reset(['season', 'year']);
     }
 
     private function createSeasonName(): string
     {
-        return $this->season.' '.$this->year;
+        return Str::title($this->season).' '.$this->year;
     }
 }
