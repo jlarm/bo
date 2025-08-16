@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Http\Requests\SeasonRequest;
 use App\Livewire\Season\CreateModal;
 use App\Livewire\Season\Index;
+use App\Livewire\Season\IndexItem;
 use App\Models\Season;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -66,29 +68,99 @@ test('create modal successfully creates unique season', function () {
 test('season model casts attributes correctly', function () {
     $season = Season::factory()->create([
         'uuid' => 'test-uuid',
-        'archived' => true,
     ]);
 
     expect($season->uuid)->toBeString();
-    expect($season->archived)->toBeBool();
-    expect($season->archived)->toBeTrue();
 });
 
 test('season model orders by season and year correctly', function () {
-    Season::factory()->create(['name' => 'Spring 2024', 'archived' => false]);
-    Season::factory()->create(['name' => 'Fall 2023', 'archived' => false]);
-    Season::factory()->create(['name' => 'Winter 2024', 'archived' => false]);
-    Season::factory()->create(['name' => 'Summer 2024', 'archived' => false]);
-    Season::factory()->create(['name' => 'Spring 2023', 'archived' => true]);
+    Season::factory()->create(['name' => 'Spring 2024']);
+    Season::factory()->create(['name' => 'Fall 2023']);
+    Season::factory()->create(['name' => 'Winter 2024']);
+    Season::factory()->create(['name' => 'Summer 2024']);
 
     $seasons = Season::orderBySeasonAndYear()->get();
 
-    // Should order by archived first (false before true), then by year, then by season order
+    // Should order by year first, then by season order (Spring, Summer, Fall, Winter)
     expect($seasons->pluck('name')->toArray())->toEqual([
         'Fall 2023',
         'Spring 2024',
         'Summer 2024',
         'Winter 2024',
-        'Spring 2023',
     ]);
+});
+
+test('season model supports soft deletes', function () {
+    $season = Season::factory()->create(['name' => 'Test Season 2024']);
+
+    expect($season->deleted_at)->toBeNull();
+
+    $season->delete();
+
+    expect($season->refresh()->deleted_at)->not->toBeNull();
+    expect(Season::where('name', 'Test Season 2024')->exists())->toBeFalse();
+    expect(Season::withTrashed()->where('name', 'Test Season 2024')->exists())->toBeTrue();
+});
+
+test('soft deleted seasons are excluded from normal queries', function () {
+    $activeSeason = Season::factory()->create(['name' => 'Active Season 2024']);
+    $deletedSeason = Season::factory()->create(['name' => 'Deleted Season 2024']);
+
+    $deletedSeason->delete();
+
+    $seasons = Season::all();
+
+    expect($seasons)->toHaveCount(1);
+    expect($seasons->first()->name)->toBe('Active Season 2024');
+});
+
+test('can restore soft deleted seasons', function () {
+    $season = Season::factory()->create(['name' => 'Restorable Season 2024']);
+    $season->delete();
+
+    expect(Season::where('name', 'Restorable Season 2024')->exists())->toBeFalse();
+
+    $season->restore();
+
+    expect(Season::where('name', 'Restorable Season 2024')->exists())->toBeTrue();
+    expect($season->refresh()->deleted_at)->toBeNull();
+});
+
+test('season request validates data correctly', function () {
+    $request = new SeasonRequest();
+
+    $rules = $request->rules();
+
+    expect($rules)->toHaveKey('uuid');
+    expect($rules)->toHaveKey('name');
+    expect($rules['uuid'])->toContain('required');
+    expect($rules['name'])->toContain('required', 'string', 'min:3', 'max:255');
+});
+
+test('season request authorizes all requests', function () {
+    $request = new SeasonRequest();
+
+    expect($request->authorize())->toBeTrue();
+});
+
+test('index item can archive season', function () {
+    $user = User::factory()->create();
+    $season = Season::factory()->create(['name' => 'Test Season 2024']);
+
+    Livewire::actingAs($user)
+        ->test(IndexItem::class, ['season' => $season])
+        ->call('archive')
+        ->assertDispatched('season.archived');
+
+    expect($season->fresh()->deleted_at)->not->toBeNull();
+});
+
+test('index item renders correctly', function () {
+    $user = User::factory()->create();
+    $season = Season::factory()->create(['name' => 'Test Season 2024']);
+
+    $component = Livewire::actingAs($user)
+        ->test(IndexItem::class, ['season' => $season]);
+
+    expect($component->get('season')->name)->toBe('Test Season 2024');
 });

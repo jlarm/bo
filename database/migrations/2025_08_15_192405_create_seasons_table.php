@@ -14,8 +14,8 @@ return new class extends Migration
             $table->id();
             $table->uuid();
             $table->string('name')->unique();
-            $table->boolean('archived')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

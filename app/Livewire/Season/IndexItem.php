@@ -15,26 +15,13 @@ final class IndexItem extends Component
 
     public function archive(): void
     {
-        $this->season->update(['archived' => true]);
+        $this->season->delete();
 
         $this->dispatch('season.archived');
 
         Flux::toast(
             text: 'The season was archived successfully.',
             heading: 'Season Archived',
-            variant: 'success',
-        );
-    }
-
-    public function reactivate(): void
-    {
-        $this->season->update(['archived' => false]);
-
-        $this->dispatch('season.archived');
-
-        Flux::toast(
-            text: 'The season was reactivated successfully.',
-            heading: 'Season Reactivated',
             variant: 'success',
         );
     }

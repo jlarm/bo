@@ -10,16 +10,23 @@ use Illuminate\Database\Seeder;
 final class SeasonSeeder extends Seeder
 {
     private array $seasons = [
-        ['name' => 'Fall 2024', 'archived' => true],
-        ['name' => 'Summer 2025', 'archived' => true],
-        ['name' => 'Fall 2025', 'archived' => false],
-        ['name' => 'Summer 2026', 'archived' => false],
+        ['name' => 'Fall 2024'],
+        ['name' => 'Summer 2025'],
+        ['name' => 'Fall 2025'],
+        ['name' => 'Summer 2026'],
     ];
 
     public function run(): void
     {
+        $createdSeasons = [];
+
         foreach ($this->seasons as $season) {
-            Season::create($season);
+            $createdSeasons[] = Season::create($season);
+        }
+
+        $lastTwoSeasons = array_slice($createdSeasons, -2);
+        foreach ($lastTwoSeasons as $season) {
+            $season->delete();
         }
     }
 }

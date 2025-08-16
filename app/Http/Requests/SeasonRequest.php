@@ -13,7 +13,6 @@ final class SeasonRequest extends FormRequest
         return [
             'uuid' => ['required'],
             'name' => ['required', 'string', 'min:3', 'max:255'],
-            'archived' => ['boolean'],
         ];
     }
 

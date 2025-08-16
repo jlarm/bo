@@ -6,24 +6,24 @@ namespace App\Models;
 
 use App\Observers\SeasonObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[ObservedBy(SeasonObserver::class)]
 final class Season extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'uuid',
         'name',
-        'archived',
     ];
 
-    public function scopeOrderBySeasonAndYear(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function scopeOrderBySeasonAndYear(Builder $query): Builder
     {
-        return $query->orderBy('archived')
-            ->orderByRaw('CAST(SUBSTR(name, -4) AS INTEGER)')
+        return $query->orderByRaw('CAST(SUBSTR(name, -4) AS INTEGER)')
             ->orderByRaw("
             CASE
                 WHEN INSTR(LOWER(name), 'spring') > 0 THEN 1
@@ -39,7 +39,6 @@ final class Season extends Model
     {
         return [
             'uuid' => 'string',
-            'archived' => 'boolean',
         ];
     }
 }
