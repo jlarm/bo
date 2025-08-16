@@ -15,7 +15,9 @@ final class CreateModal extends Component
 
     public function save(): void
     {
-        $this->form->save();
+        if (! $this->form->save()) {
+            return;
+        }
 
         $this->dispatch('season.created');
 

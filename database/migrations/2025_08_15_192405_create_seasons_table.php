@@ -13,7 +13,7 @@ return new class extends Migration
         Schema::create('seasons', function (Blueprint $table): void {
             $table->id();
             $table->uuid();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->boolean('archived')->default(false);
             $table->timestamps();
         });

@@ -22,17 +22,35 @@ final class SeasonForm extends Form
         ];
     }
 
-    public function save(): void
+    public function messages(): array
+    {
+        return [
+            'season_name_unique' => 'This season and year combination already exists.',
+        ];
+    }
+
+    public function save(): bool
     {
         $this->validate();
 
+        $seasonName = $this->createSeasonName();
+
+        // Check if season name already exists
+        if (Season::where('name', $seasonName)->exists()) {
+            $this->addError('season', 'This season already exists.');
+
+            return false;
+        }
+
         $data = [
-            'name' => $this->createSeasonName(),
+            'name' => $seasonName,
         ];
 
         Season::create($data);
 
         $this->reset(['season', 'year']);
+
+        return true;
     }
 
     private function createSeasonName(): string

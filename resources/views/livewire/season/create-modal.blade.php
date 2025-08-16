@@ -10,14 +10,20 @@
                     <flux:heading size="lg">Add Season</flux:heading>
                 </div>
 
-                <flux:radio.group wire:model="form.season" variant="buttons" class="w-full *:flex-1">
-                    <flux:radio value="{{ \App\Enums\Seasons::SPRING }}" icon="{{ \App\Enums\Seasons::SPRING->iconName() }}">Spring</flux:radio>
-                    <flux:radio value="{{ \App\Enums\Seasons::SUMMER }}" icon="{{ \App\Enums\Seasons::SUMMER->iconName() }}">Summer</flux:radio>
-                    <flux:radio value="{{ \App\Enums\Seasons::FALL }}" icon="{{ \App\Enums\Seasons::FALL->iconName() }}">Fall</flux:radio>
-                    <flux:radio value="{{ \App\Enums\Seasons::WINTER }}" icon="{{ \App\Enums\Seasons::WINTER->iconName() }}">Winter</flux:radio>
-                </flux:radio.group>
+                <flux:field>
+                    <flux:radio.group wire:model="form.season" variant="buttons" class="w-full *:flex-1">
+                        @foreach(\App\Enums\Seasons::cases() as $season)
+                            <flux:radio value="{{ $season->value }}" icon="{{ $season->iconName() }}">{{ $season->label() }}</flux:radio>
+                        @endforeach
+                    </flux:radio.group>
+                </flux:field>
 
-                <flux:input wire:model="form.year" placeholder="Year (e.g. 2025)"/>
+                <flux:field>
+                    <flux:input wire:model="form.year" placeholder="Year (e.g. 2025)"/>
+                    <flux:error name="form.year" />
+                </flux:field>
+
+                <flux:error name="form.season" />
 
                 <div class="flex">
                     <flux:spacer/>
