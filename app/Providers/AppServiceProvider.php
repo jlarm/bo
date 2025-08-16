@@ -25,7 +25,7 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer('*', static function ($view): void {
+        View::composer('*', static function (\Illuminate\View\View $view): void {
             $view->with('currentOrganization', Organization::current());
         });
     }

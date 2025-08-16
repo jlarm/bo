@@ -20,7 +20,7 @@ final class Season extends Model
         'archived',
     ];
 
-    public function scopeOrderBySeasonAndYear($query)
+    public function scopeOrderBySeasonAndYear(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
         return $query->orderBy('archived')
             ->orderByRaw('CAST(SUBSTR(name, -4) AS INTEGER)')

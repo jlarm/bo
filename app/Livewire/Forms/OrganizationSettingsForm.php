@@ -30,7 +30,7 @@ final class OrganizationSettingsForm extends Form
     public string $zip_code = '';
 
     #[Validate('nullable|image|mimes:jpg,jpeg,png|max:2048')]
-    public $logo_path;
+    public ?UploadedFile $logo_path = null;
 
     public function loadFromModel(): void
     {
