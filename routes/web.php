@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Livewire\Season\Show as SeasonShow;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -22,6 +23,10 @@ Route::view('organization-settings', 'organization.settings-form')
 Route::view('seasons', 'season.index')
     ->middleware(['auth', 'verified'])
     ->name('season.index');
+
+Route::get('seasons/{season:uuid}', SeasonShow::class)
+    ->middleware(['auth', 'verified'])
+    ->name('season.show');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');

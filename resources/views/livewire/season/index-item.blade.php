@@ -9,6 +9,10 @@
             <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" inset="top bottom"></flux:button>
             <flux:menu>
                 <flux:menu.item
+                    href="{{ route('season.show', $season->uuid) }}"
+                    icon="eye"
+                >View</flux:menu.item>
+                <flux:menu.item
                     wire:click="archive"
                     wire:confirm="Are you sure you want to archive this season?"
                     icon="trash"
