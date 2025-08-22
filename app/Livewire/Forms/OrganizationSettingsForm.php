@@ -23,7 +23,7 @@ final class OrganizationSettingsForm extends Form
     #[Validate('nullable|string|min:3|max:255')]
     public string $city = '';
 
-    #[Validate('nullable|string|min:3|max:255')]
+    #[Validate('nullable|string|min:2|max:255')]
     public string $state = '';
 
     #[Validate('nullable|string|min:3|max:255')]
