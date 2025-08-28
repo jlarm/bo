@@ -7,12 +7,12 @@
         <form wire:submit.prevent="save">
             <div class="space-y-6">
                 <div>
-                    <flux:heading size="lg">Add Team</flux:heading>
+                    <flux:heading size="lg">Add Team to {{ $season->name }}</flux:heading>
                 </div>
 
                 <flux:field>
                     <flux:input wire:model="form.name" placeholder="Team Name"/>
-                    <flux:error name="form.year" />
+                    <flux:error name="form.name" />
                 </flux:field>
 
                 <flux:radio.group wire:model="form.division" label="Division" variant="pills">

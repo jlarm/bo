@@ -18,7 +18,9 @@ final class CreateModal extends Component
 
     public function save(): void
     {
-        if (! $this->form->save($this->season)) {
+        if (! $this->form->save($this->season->id)) {
+            $this->addError('form.name', 'This team already exists in this season.');
+
             return;
         }
 
